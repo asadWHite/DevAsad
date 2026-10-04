@@ -1,4 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -158,6 +160,17 @@ export default function App() {
   return (
     <LangProvider>
       <Site />
+      {/*
+        Vercel Web Analytics + Speed Insights.
+        Mounted exactly once here in the root component (this project is a Vite SPA,
+        not Next.js, so there is no app/layout.tsx): one global instance for the whole
+        site, all locales (/uz, /ru, /) and nested paths. Both components render `null`
+        and inject a deferred script, so they add no DOM, no layout shift and never
+        block the intro/hero. Auto pageview tracking is left on (no `route` prop) so
+        client-side history changes are measured by the official script itself.
+      */}
+      <Analytics />
+      <SpeedInsights />
     </LangProvider>
   );
 }
