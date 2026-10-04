@@ -1,16 +1,17 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { useLang } from "../i18n";
-import { services, minPrice, fmtUZS, type Service } from "../data/services";
-import Magnetic from "../components/Magnetic";
-import TelegramIcon from "../components/TelegramIcon";
-import { tgUrl } from "../data/contacts";
+import { useI18n } from "@/i18n";
+import { services, minPrice, type Service } from "@/data/services";
+import Magnetic from "@/components/Magnetic";
+import TelegramIcon from "@/components/TelegramIcon";
+import { tgUrl } from "@/data/contacts";
 
 /* Mobile-only controlled service scene: one active frame, tap/swipe to switch.
    Auto-advances every 6s until the user touches it. */
 
 function PriceMorph({ value }: { value: number }) {
+  const { num } = useI18n();
   const ref = useRef<HTMLSpanElement>(null);
   const obj = useRef({ v: value });
   useLayoutEffect(() => {
@@ -20,23 +21,23 @@ function PriceMorph({ value }: { value: number }) {
       duration: 0.5,
       ease: "power2.out",
       onUpdate: () => {
-        if (ref.current) ref.current.textContent = fmtUZS(obj.current.v);
+        if (ref.current) ref.current.textContent = num(obj.current.v);
       },
     });
     return () => {
       tw.kill();
     };
-  }, [value]);
-  return <span ref={ref}>{fmtUZS(value)}</span>;
+  }, [value, num]);
+  return <span ref={ref}>{num(value)}</span>;
 }
 
 export default function MobileServices({ onOrder }: { onOrder: (id: string) => void }) {
-  const { t } = useLang();
+  const { t, loc } = useI18n();
   const [i, setI] = useState(0);
   const touched = useRef(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  const s: Service = services[i];
-  const features = t(s.inclKey).split(",");
+  const s: Service = services[i]!;
+  const features = loc(s.included).split(",");
 
   /* auto-advance until first interaction */
   useEffect(() => {
@@ -88,7 +89,7 @@ export default function MobileServices({ onOrder }: { onOrder: (id: string) => v
               si === i ? "bg-navy text-paper border-navy" : "border-line text-smoke"
             }`}
           >
-            {sv.num} {t(sv.titleKey)}
+            {sv.num} {loc(sv.title)}
           </button>
         ))}
       </div>
@@ -99,14 +100,14 @@ export default function MobileServices({ onOrder }: { onOrder: (id: string) => v
           {s.num} / 0{services.length} {s.featured && <span className="text-navy font-semibold">· ★</span>}
         </p>
         <h3 className="display- mt-2 font-extrabold text-ink leading-none" style={{ fontSize: "clamp(34px, 10vw, 56px)" }}>
-          {t(s.titleKey)}
+          {loc(s.title)}
         </h3>
-        <p className="mt-4 mono text-[9px] tracking-[0.22em] text-smoke">{t("svc_from")}</p>
+        <p className="mt-4 mono text-[9px] tracking-[0.22em] text-smoke">{t("services.from")}</p>
         <p className="display- mt-1 font-extrabold text-navy tabular-nums" style={{ fontSize: "clamp(30px, 9vw, 50px)" }}>
           <PriceMorph value={minPrice(s)} />
-          <span className="mono ml-2 text-[10px] tracking-[0.16em] font-normal text-smoke">+ {t("svc_uzs")}</span>
+          <span className="mono ml-2 text-[10px] tracking-[0.16em] font-normal text-smoke">+ {t("services.uzs")}</span>
         </p>
-        <p className="mt-4 text-[14px] leading-relaxed text-ink/70">{t(s.descKey)}</p>
+        <p className="mt-4 text-[14px] leading-relaxed text-ink/70">{loc(s.desc)}</p>
         <ul className="mt-4 space-y-2">
           {features.slice(0, 4).map((f) => (
             <li key={f} className="flex items-center gap-2.5 text-[12px] text-ink/65">
@@ -114,7 +115,7 @@ export default function MobileServices({ onOrder }: { onOrder: (id: string) => v
             </li>
           ))}
         </ul>
-        <p className="mono mt-4 text-[8px] tracking-[0.14em] text-smoke/80 leading-relaxed">{t("svc_disclaimer")}</p>
+        <p className="mono mt-4 text-[8px] tracking-[0.14em] text-smoke/80 leading-relaxed">{t("services.disclaimer")}</p>
 
         <div className="mt-6 flex items-center justify-between gap-3">
           <Magnetic strength={0.3}>
@@ -125,14 +126,14 @@ export default function MobileServices({ onOrder }: { onOrder: (id: string) => v
               onClick={() => onOrder(s.id)}
               className="inline-flex items-center gap-2.5 bg-navy text-paper px-6 py-4 mono text-[10px] tracking-[0.16em] font-semibold"
             >
-              <TelegramIcon size={14} /> {t("cta_float")} <ArrowUpRight size={13} />
+              <TelegramIcon size={14} /> {t("actions.discussProject")} <ArrowUpRight size={13} />
             </a>
           </Magnetic>
           <div className="flex gap-2">
-            <button onClick={() => goto(i - 1)} aria-label="Oldingi" className="w-11 h-11 border border-line flex items-center justify-center text-ink active:bg-mist">
+            <button onClick={() => goto(i - 1)} aria-label={t("a11y.prev")} className="w-11 h-11 border border-line flex items-center justify-center text-ink active:bg-mist">
               <ArrowLeft size={15} />
             </button>
-            <button onClick={() => goto(i + 1)} aria-label="Keyingi" className="w-11 h-11 border border-navy bg-navy text-paper flex items-center justify-center active:bg-abyss">
+            <button onClick={() => goto(i + 1)} aria-label={t("a11y.next")} className="w-11 h-11 border border-navy bg-navy text-paper flex items-center justify-center active:bg-abyss">
               <ArrowRight size={15} />
             </button>
           </div>

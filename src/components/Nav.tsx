@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useLang, type Lang } from "../i18n";
+import { LOCALE_NATIVE_LABEL, useI18n } from "@/i18n";
+import type { Locale } from "@/i18n";
 
 const SECTIONS = ["work", "services", "about", "lab", "contact"] as const;
 
+/** Picker order — UZ and RU are the primary pair, EN is preserved. */
+const PICKER: readonly Locale[] = ["uz", "ru", "en"];
+
 export default function Nav({ onLang }: { onLang: () => void }) {
-  const { lang, setLang, t } = useLang();
+  const { t, locale, setLocale } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -39,27 +43,28 @@ export default function Nav({ onLang }: { onLang: () => void }) {
   }, [open]);
 
   const items: { id: (typeof SECTIONS)[number]; label: string }[] = [
-    { id: "work", label: t("nav_work") },
-    { id: "services", label: t("nav_services") },
-    { id: "about", label: t("nav_about") },
-    { id: "lab", label: t("nav_lab") },
-    { id: "contact", label: t("nav_contact") },
+    { id: "work", label: t("nav.work") },
+    { id: "services", label: t("nav.services") },
+    { id: "about", label: t("nav.about") },
+    { id: "lab", label: t("nav.lab") },
+    { id: "contact", label: t("nav.contact") },
   ];
 
-  const LangBtn = ({ l, big = false }: { l: Lang; big?: boolean }) => (
+  const LangBtn = ({ l, big = false }: { l: Locale; big?: boolean }) => (
     <button
       onClick={() => {
-        if (lang !== l) {
-          setLang(l);
+        if (locale !== l) {
+          setLocale(l);
           onLang();
         }
       }}
       className={`relative transition-colors duration-300 ${big ? "px-4 py-2.5" : "px-2.5 py-1.5"} ${
-        lang === l ? "text-paper" : big ? "text-paper/50 hover:text-paper" : "text-smoke hover:text-navy"
+        locale === l ? "text-paper" : big ? "text-paper/50 hover:text-paper" : "text-smoke hover:text-navy"
       }`}
-      aria-pressed={lang === l}
+      aria-pressed={locale === l}
+      lang={l}
     >
-      {lang === l && (
+      {locale === l && (
         <span
           className={`absolute inset-0 ${big ? "bg-paper/20" : "bg-navy"} transition-all duration-300`}
           style={{ borderRadius: 999 }}
@@ -67,6 +72,7 @@ export default function Nav({ onLang }: { onLang: () => void }) {
         />
       )}
       <span className="relative z-10">{l.toUpperCase()}</span>
+      <span className="sr-only">{t(`locale.${l}`)}</span>
     </button>
   );
 
@@ -84,7 +90,7 @@ export default function Nav({ onLang }: { onLang: () => void }) {
             Dev.Асад
           </a>
 
-          <nav className="hidden md:flex items-center gap-6" aria-label="Asosiy">
+          <nav className="hidden md:flex items-center gap-6" aria-label={t("a11y.mainNav")}>
             {items.map((it) => (
               <a
                 key={it.id}
@@ -100,15 +106,19 @@ export default function Nav({ onLang }: { onLang: () => void }) {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="mono text-[10px] flex items-center border border-line rounded-full px-1 py-0.5" role="group" aria-label="Язык / Language / Til">
-              <LangBtn l="ru" />
-              <LangBtn l="en" />
-              <LangBtn l="uz" />
+            <div
+              className="mono text-[10px] flex items-center border border-line rounded-full px-1 py-0.5"
+              role="group"
+              aria-label={t("locale.picker")}
+            >
+              {PICKER.map((l) => (
+                <LangBtn key={l} l={l} />
+              ))}
             </div>
             <button
               onClick={() => setOpen(true)}
               className="md:hidden w-9 h-9 border border-line rounded-full flex items-center justify-center text-ink"
-              aria-label={t("nav_menu")}
+              aria-label={t("a11y.openMenu")}
             >
               <Menu size={15} />
             </button>
@@ -123,14 +133,19 @@ export default function Nav({ onLang }: { onLang: () => void }) {
         }`}
         role="dialog"
         aria-modal="true"
+        aria-label={t("a11y.mobileMenu")}
       >
         <div className="flex items-center justify-between px-5 py-5">
           <span className="mono font-semibold tracking-[0.1em] text-[12px]">Dev.Асад</span>
-          <button onClick={() => setOpen(false)} className="w-9 h-9 border border-paper/25 rounded-full flex items-center justify-center" aria-label={t("nav_close")}>
+          <button
+            onClick={() => setOpen(false)}
+            className="w-9 h-9 border border-paper/25 rounded-full flex items-center justify-center"
+            aria-label={t("a11y.closeMenu")}
+          >
             <X size={15} />
           </button>
         </div>
-        <nav className="flex-1 flex flex-col justify-center px-6 gap-1" aria-label="Mobil menyu">
+        <nav className="flex-1 flex flex-col justify-center px-6 gap-1" aria-label={t("a11y.mainNav")}>
           {items.map((it, i) => (
             <a
               key={it.id}
@@ -146,10 +161,11 @@ export default function Nav({ onLang }: { onLang: () => void }) {
         </nav>
         <div className="px-6 pb-10 mono text-[11px] flex flex-col gap-6">
           <div className="flex gap-2 border border-paper/20 rounded-full self-start px-1 py-1">
-            <LangBtn l="ru" big />
-            <LangBtn l="en" big />
-            <LangBtn l="uz" big />
+            {PICKER.map((l) => (
+              <LangBtn key={l} l={l} big />
+            ))}
           </div>
+          <span className="text-paper/35">{LOCALE_NATIVE_LABEL[locale]}</span>
         </div>
       </div>
     </>
