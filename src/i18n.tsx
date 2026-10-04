@@ -26,7 +26,7 @@ export const dict: Dict = {
   intro_m1: { ru: "ПРИДУМЫВАЮ.", en: "I IMAGINE.", uz: "O'YLAYMAN." },
   intro_m2: { ru: "СОЗДАЮ.", en: "I BUILD.", uz: "QURAMAN." },
   intro_m3: { ru: "ЗАПУСКАЮ.", en: "I LAUNCH.", uz: "ISHGA TUSHIRAMAN." },
-  cta_float: { ru: "Обсудить проект", en: "Start a project", uz: "Loyihani boshlash" },
+  cta_float: { ru: "ОБСУДИТЬ ПРОЕКТ", en: "DISCUSS YOUR PROJECT", uz: "LOYIHANI MUHOKAMA QILISH" },
   intro_loading: { ru: "ОТКРЫВАЮ СТУДИЮ", en: "OPENING STUDIO", uz: "STUDIYA OCHILMOQDA" },
 
   /* ---------- nav ---------- */
@@ -271,7 +271,7 @@ export const dict: Dict = {
   s1_t: { ru: "ВЕБ-САЙТЫ", en: "WEBSITES", uz: "VEB-SAYTLAR" },
   s1_d: { ru: "Лендинги, корпоративные и премиальные сайты с кинематографичной подачей.", en: "Landing pages, business and premium websites with cinematic presentation.", uz: "Lending, biznes va premium saytlar — kinematograf taqdimot bilan." },
   s1_f: { ru: "личные бренды, компании, агентства, запуски продуктов", en: "personal brands, companies, agencies, product launches", uz: "shaxsiy brendlar, kompaniyalar, agentliklar, mahsulot ishga tushirish" },
-  s1_i: { ru: "адаптивный дизайн, анимации, форма связи, Telegram-интеграция, SEO-база, деплой", en: "responsive design, animation, contact form, Telegram integration, SEO foundation, deployment", uz: "responsiv dizayn, animatsiyalar, aloqa formi, Telegram integratsiya, SEO asos, joylashtirish" },
+  s1_i: { ru: "адаптивный дизайн, анимации, прямой Telegram-контакт, SEO-база, деплой", en: "responsive design, animation, direct Telegram contact, SEO foundation, deployment", uz: "responsiv dizayn, animatsiyalar, to'g'ridan-to'g'ri Telegram aloqasi, SEO asos, joylashtirish" },
   s2_t: { ru: "TELEGRAM-БОТЫ", en: "TELEGRAM BOTS", uz: "TELEGRAM BOTLAR" },
   s2_d: { ru: "Боты для бизнеса: заявки, каталоги, админки, AI-диалоги.", en: "Bots for business: leads, catalogs, admin, AI conversations.", uz: "Biznes uchun botlar: arizalar, kataloglar, admin, AI dialoglar." },
   s2_f: { ru: "услуги, магазины, школы, локальный бизнес", en: "services, shops, schools, local businesses", uz: "xizmatlar, do'konlar, maktablar, mahalliy biznes" },
@@ -494,10 +494,11 @@ export const dict: Dict = {
   ct_l1: { ru: "ДАВАЙТЕ", en: "LET'S", uz: "KELING," },
   ct_l2: { ru: "СОЗДАДИМ ТО,", en: "BUILD SOMETHING", uz: "OCHISHGA ARZIYDIGAN" },
   ct_l3: { ru: "ЧТО ХОЧЕТСЯ ОТКРЫТЬ.", en: "WORTH OPENING.", uz: "NARSANI QURAMIZ." },
-  ct_cta: { ru: "Написать в Telegram", en: "Message on Telegram", uz: "Telegram orqali yozish" },
+  ct_cta: { ru: "НАПИСАТЬ В TELEGRAM", en: "MESSAGE ON TELEGRAM", uz: "TELEGRAMDA YOZISH" },
   ct_ig: { ru: "Instagram", en: "Instagram", uz: "Instagram" },
   ct_links: { ru: "ПРОЕКТЫ ИЗ АРХИВА", en: "PROJECTS FROM THE ARCHIVE", uz: "ARXIVDAGI LOYIHALAR" },
-  ct_start: { ru: "НАЧАТЬ ПРОЕКТ", en: "START A PROJECT", uz: "LOYIHANI BOSHLASH" },
+  ct_start: { ru: "ПРЯМОЙ КОНТАКТ", en: "DIRECT CONTACT", uz: "TO'G'RIDAN-TO'G'RI ALOQA" },
+  ct_direct_note: { ru: "Без форм и ожидания. Напишите мне лично в Telegram — обсудим идею, задачу и следующий шаг.", en: "No forms, no waiting. Message me personally on Telegram — we will discuss the idea, the scope and the next step.", uz: "Formasiz va kutishsiz. Telegramda shaxsan yozing — g'oya, vazifa va keyingi qadamni muhokama qilamiz." },
   ct_more: { ru: "СТРОИТЬ ЕЩЁ МНОГО.", en: "MORE TO BUILD.", uz: "QURILADIGANLAR KO'P." },
   ct_foot_note: {
     ru: "Сайт построен на React · TypeScript · Tailwind · GSAP · Lenis. Личная студия — обновляется постоянно.",

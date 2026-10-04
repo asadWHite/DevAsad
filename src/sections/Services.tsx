@@ -7,6 +7,8 @@ import { SectionLabel, FadeUp } from "../components/ui";
 import { services, fmtUZS, type Service, type ServiceTag } from "../data/services";
 import Magnetic from "../components/Magnetic";
 import MobileServices from "./MobileServices";
+import TelegramIcon from "../components/TelegramIcon";
+import { tgUrl } from "../data/contacts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -131,12 +133,14 @@ function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void 
             <p className="mono text-[8px] tracking-[0.18em] text-smoke max-w-[340px] leading-relaxed">{t("svc_disclaimer")}</p>
             <Magnetic strength={0.35}>
               <a
-                href="#contact"
+                href={tgUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => onOrder(s.id)}
                 data-cursor="open"
                 className="group/b inline-flex items-center gap-2.5 mono text-[10px] tracking-[0.18em] px-5 py-3.5 bg-navy text-paper hover:bg-abyss transition-colors duration-400"
               >
-                {isQuote ? t("svc_quote") : t("svc_order")}
+                <TelegramIcon size={14} /> {t("cta_float")}
                 <ArrowUpRight size={13} className="transition-transform duration-300 group-hover/b:translate-x-0.5 group-hover/b:-translate-y-0.5" />
               </a>
             </Magnetic>

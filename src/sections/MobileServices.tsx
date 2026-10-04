@@ -4,6 +4,8 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useLang } from "../i18n";
 import { services, minPrice, fmtUZS, type Service } from "../data/services";
 import Magnetic from "../components/Magnetic";
+import TelegramIcon from "../components/TelegramIcon";
+import { tgUrl } from "../data/contacts";
 
 /* Mobile-only controlled service scene: one active frame, tap/swipe to switch.
    Auto-advances every 6s until the user touches it. */
@@ -117,11 +119,13 @@ export default function MobileServices({ onOrder }: { onOrder: (id: string) => v
         <div className="mt-6 flex items-center justify-between gap-3">
           <Magnetic strength={0.3}>
             <a
-              href="#contact"
+              href={tgUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => onOrder(s.id)}
               className="inline-flex items-center gap-2.5 bg-navy text-paper px-6 py-4 mono text-[10px] tracking-[0.16em] font-semibold"
             >
-              {t("cta_float")} <ArrowUpRight size={13} />
+              <TelegramIcon size={14} /> {t("cta_float")} <ArrowUpRight size={13} />
             </a>
           </Magnetic>
           <div className="flex gap-2">

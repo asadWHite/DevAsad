@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ArrowLeft, ArrowRight, RotateCcw, Send } from "lucide-react";
+import TelegramIcon from "../components/TelegramIcon";
 import { useLang } from "../i18n";
 import { SectionLabel, FadeUp } from "../components/ui";
 import { services, fmtUZS } from "../data/services";
@@ -64,8 +65,7 @@ export default function Estimator() {
   const on = "bg-navy text-paper border-navy";
   const off = "border-line text-ink/70 hover:border-navy hover:text-navy";
 
-  const message = `${t("ct_start")}\n— ${t(svc.titleKey)}\n— ${t("est_q2")}: ${t("est_" + cx)}\n— ${t("est_q3")}: ${langsN}\n— ${t("est_q4")}: ${ints.size ? [...ints].join(", ") : t("est_none")}\n— ${t("est_result")}: ${fmtUZS(range.lo)}–${fmtUZS(range.hi)} ${t("svc_uzs")}`;
-  const tg = tgUrl(message);
+  const tg = tgUrl();
 
   return (
     <section className="relative bg-pure py-24 sm:py-32">
@@ -173,8 +173,8 @@ export default function Estimator() {
                         <Send size={13} /> {t("est_send")}
                       </a>
                     ) : (
-                      <a href="#contact" data-cursor="link" className="inline-flex items-center gap-3 bg-paper text-navy px-6 py-4 mono text-[10px] tracking-[0.18em] font-semibold hover:bg-navy hover:text-paper border border-paper transition-colors">
-                        <Send size={13} /> {t("svc_quote")}
+                      <a href={tgUrl()} target="_blank" rel="noopener noreferrer" data-cursor="link" className="inline-flex items-center gap-3 bg-paper text-navy px-6 py-4 mono text-[10px] tracking-[0.18em] font-semibold hover:bg-navy hover:text-paper border border-paper transition-colors">
+                        <TelegramIcon size={15} /> {t("cta_float")}
                       </a>
                     )}
                     <button onClick={() => { setInts(new Set()); setStep(0); }} className="inline-flex items-center gap-2 mono text-[10px] tracking-[0.18em] text-paper/60 hover:text-paper px-4 py-4">

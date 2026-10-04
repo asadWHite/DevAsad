@@ -4,6 +4,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useLang } from "../i18n";
 import Magnetic from "../components/Magnetic";
+import TelegramIcon from "../components/TelegramIcon";
+import { tgUrl } from "../data/contacts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -160,8 +162,8 @@ export default function Hero({ ready }: { ready: boolean }) {
           <div data-h-meta className="lg:col-span-3 flex lg:justify-end opacity-0">
             <div className="flex flex-col items-start gap-3">
               <Magnetic strength={0.35}>
-                <a href="#contact" data-cursor="talk" className="group inline-flex items-center gap-3 bg-navy text-paper px-6 py-4 mono text-[10px] tracking-[0.2em] font-semibold hover:bg-abyss transition-colors duration-400">
-                  {t("hero_cta1")}
+                <a href={tgUrl()} target="_blank" rel="noopener noreferrer" data-cursor="talk" className="group inline-flex items-center gap-3 bg-paper text-navy border border-navy px-6 py-4 mono text-[10px] tracking-[0.2em] font-semibold hover:bg-navy hover:text-paper transition-colors duration-400">
+                  <TelegramIcon size={15} /> {t("hero_cta1")}
                   <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
               </Magnetic>
