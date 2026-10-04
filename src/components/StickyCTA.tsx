@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useLang } from "../i18n";
-import { tgUrl } from "../data/contacts";
+import { useI18n } from "@/i18n";
+import { tgUrl } from "@/data/contacts";
 import TelegramIcon from "./TelegramIcon";
 
 /* Direct personal Telegram contact, always one tap away on mobile. */
 export default function StickyCTA() {
-  const { t } = useLang();
+  const { t } = useI18n();
   const [show, setShow] = useState(false);
   const lastY = useRef(0);
   const nearContact = useRef(false);
@@ -29,7 +29,7 @@ export default function StickyCTA() {
     <a href={tgUrl()} target="_blank" rel="noopener noreferrer" aria-hidden={!show}
       className={`md:hidden fixed left-4 right-4 z-[85] flex items-center justify-center gap-3 bg-paper text-navy border border-navy py-4 mono text-[11px] tracking-[0.2em] font-semibold shadow-[0_16px_40px_-12px_rgba(7,22,42,0.35)] transition-all duration-500 ${show ? "bottom-4 opacity-100" : "-bottom-20 opacity-0 pointer-events-none"}`}
       style={{ bottom: show ? "calc(env(safe-area-inset-bottom, 0px) + 16px)" : undefined }}>
-      <TelegramIcon size={16} /> {t("cta_float")}
+      <TelegramIcon size={16} /> {t("actions.discussProject")}
     </a>
   );
 }

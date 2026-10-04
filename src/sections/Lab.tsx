@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useLang } from "../i18n";
-import { SectionLabel, RevealLine, FadeUp } from "../components/ui";
-import Magnetic from "../components/Magnetic";
-import { scrollState } from "../lib/scroll";
+import { useI18n, type Messages, type StringPaths } from "@/i18n";
+import { SectionLabel, RevealLine, FadeUp } from "@/components/ui";
+import Magnetic from "@/components/Magnetic";
+import { scrollState } from "@/lib/scroll";
 
 /* ------------------------------------------------------------------ */
 const Cell = ({
   n, titleKey, descKey, children, className = "", hint,
-}: { n: string; titleKey: string; descKey: string; children: ReactNode; className?: string; hint?: string }) => {
-  const { t } = useLang();
+}: { n: string; titleKey: StringPaths<Messages>; descKey: StringPaths<Messages>; children: ReactNode; className?: string; hint?: string }) => {
+  const { t } = useI18n();
   return (
     <div className={`relative border border-line bg-pure overflow-hidden ${className}`}>
       <div className="absolute top-0 inset-x-0 flex items-center justify-between px-4 sm:px-5 py-3 border-b border-line/70 z-10 bg-pure/80 backdrop-blur-sm">
-        <p className="mono text-[9px] tracking-[0.22em] text-navy">EXP {n} — {t(titleKey)}</p>
+        <p className="mono text-[9px] tracking-[0.22em] text-navy">{t("lab.experiment")} {n} — {t(titleKey)}</p>
         <p className="mono text-[8px] tracking-[0.18em] text-smoke hidden sm:block">{t(descKey)}</p>
       </div>
       <div className="absolute inset-0 pt-10">{children}</div>
@@ -23,6 +23,8 @@ const Cell = ({
 
 /* ---------------- EXP 01 — kinetic type ---------------- */
 function KineticType() {
+  const { t } = useI18n();
+  const motionWord = t("lab.motion");
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current!;
@@ -59,7 +61,7 @@ function KineticType() {
   }, []);
   return (
     <div ref={ref} className="relative w-full h-full flex items-center justify-center cursor-crosshair" aria-hidden>
-      {"MOTION".split("").map((c, i) => (
+      {motionWord.split("").map((c, i) => (
         <span key={i} data-l className="display- inline-block font-extrabold text-navy will-change-transform" style={{ fontSize: "clamp(44px,6.5vw,96px)" }}>
           {c}
         </span>
@@ -149,13 +151,13 @@ function ImageDistort() {
     raf = requestAnimationFrame(loop);
     return () => { cancelAnimationFrame(raf); el.removeEventListener("pointermove", onMove); };
   }, []);
-  const { t } = useLang();
+  const { t } = useI18n();
   return (
     <div ref={ref} className="w-full h-full overflow-hidden bg-abyss cursor-crosshair">
       <img
         ref={imgRef}
         src="/images/lab-ink.jpg"
-        alt={t("alt_ink")}
+        alt={t("lab.imageAlt")}
         loading="lazy"
         className="w-full h-full object-cover will-change-transform"
         style={{ transform: "scale(1.18)" }}
@@ -166,6 +168,8 @@ function ImageDistort() {
 
 /* ---------------- EXP 05 — scroll physics ---------------- */
 function ScrollPhysics() {
+  const { t } = useI18n();
+  const flowWord = t("lab.flow");
   const ref = useRef<HTMLSpanElement>(null);
   const valRef = useRef<HTMLSpanElement>(null);
   useEffect(() => {
@@ -187,17 +191,17 @@ function ScrollPhysics() {
     <div className="w-full h-full flex items-center justify-center gap-6 select-none">
       <span className="mono text-[9px] tracking-[0.2em] text-smoke">v=<span ref={valRef} className="text-navy">000.0</span></span>
       <span ref={ref} className="display- inline-block font-extrabold text-ink will-change-transform" style={{ fontSize: "clamp(50px,7vw,110px)" }}>
-        FLOW<span className="text-navy">.</span>
+        {flowWord}<span className="text-navy">.</span>
       </span>
-      <span className="mono text-[9px] tracking-[0.2em] text-smoke" aria-hidden>←SCROLL→</span>
+      <span className="mono text-[9px] tracking-[0.2em] text-smoke" aria-hidden>{t("lab.scrollHint")}</span>
     </div>
   );
 }
 
 /* ---------------- EXP 06 — AI workflow ---------------- */
 function AIFlow() {
-  const { t } = useLang();
-  const steps = ["lab6_s1", "lab6_s2", "lab6_s3", "lab6_s4", "lab6_s5"];
+  const { t } = useI18n();
+  const steps = ["lab.s1", "lab.s2", "lab.s3", "lab.s4", "lab.s5"] as const;
   const [active, setActive] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -227,7 +231,7 @@ function AIFlow() {
           </div>
         ))}
       </div>
-      <p className="text-[13px] sm:text-[15px] leading-relaxed text-ink/70 max-w-2xl">{t("lab6_b")}</p>
+      <p className="text-[13px] sm:text-[15px] leading-relaxed text-ink/70 max-w-2xl">{t("lab.aiBody")}</p>
       <div className="mono text-[8px] tracking-[0.22em] text-smoke">
         GEMINI · CLAUDE · CODEX — <span className="text-navy">{active + 1}/5</span>
       </div>
@@ -235,49 +239,57 @@ function AIFlow() {
   );
 }
 
+/* ---------------- the magnetic label — localized ---------------- */
+function MagneticLabLabel() {
+  const { t } = useI18n();
+  return (
+    <Magnetic strength={0.55}>
+      <span className="display- inline-flex items-center justify-center w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-navy text-paper font-bold text-sm tracking-[0.1em] select-none">
+        {t("lab.magnet")}
+      </span>
+    </Magnetic>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 export default function Lab() {
-  const { t } = useLang();
+  const { t } = useI18n();
   return (
     <section id="lab" className="relative bg-paper py-24 sm:py-36">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-        <SectionLabel index="06" text={t("lab_kicker")} />
+        <SectionLabel index="06" text={t("lab.kicker")} />
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           <div className="lg:col-span-7">
             <RevealLine>
 <h2 className="lab-h1 display- font-extrabold text-ink" style={{ fontSize: "clamp(52px, 8.5vw, 130px)" }}>
-              {t("lab_title")}<span className="text-navy">.</span>
+              {t("lab.title")}<span className="text-navy">.</span>
               </h2>
             </RevealLine>
           </div>
           <FadeUp delay={0.15} className="lg:col-span-5">
-            <p className="text-[15px] sm:text-[17px] leading-relaxed text-ink/70 max-w-md">{t("lab_lead")}</p>
+            <p className="text-[15px] sm:text-[17px] leading-relaxed text-ink/70 max-w-md">{t("lab.lead")}</p>
           </FadeUp>
         </div>
 
         <FadeUp className="mt-14 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-5">
-          <Cell n="01" titleKey="lab1_t" descKey="lab1_d" className="md:col-span-7 h-[240px] sm:h-[300px]">
+          <Cell n="01" titleKey="lab.e1t" descKey="lab.e1d" className="md:col-span-7 h-[240px] sm:h-[300px]">
             <KineticType />
           </Cell>
-          <Cell n="02" titleKey="lab2_t" descKey="lab2_d" className="md:col-span-5 h-[240px] sm:h-[300px]">
+          <Cell n="02" titleKey="lab.e2t" descKey="lab.e2d" className="md:col-span-5 h-[240px] sm:h-[300px]">
             <div className="w-full h-full flex items-center justify-center">
-              <Magnetic strength={0.55}>
-                <span className="display- inline-flex items-center justify-center w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-navy text-paper font-bold text-sm tracking-[0.1em] select-none">
-                  MAGNET
-                </span>
-              </Magnetic>
+              <MagneticLabLabel />
             </div>
           </Cell>
-          <Cell n="03" titleKey="lab3_t" descKey="lab3_d" className="md:col-span-5 h-[240px] sm:h-[300px]">
+          <Cell n="03" titleKey="lab.e3t" descKey="lab.e3d" className="md:col-span-5 h-[240px] sm:h-[300px]">
             <CursorGrid />
           </Cell>
-          <Cell n="04" titleKey="lab4_t" descKey="lab4_d" className="md:col-span-7 h-[240px] sm:h-[300px]">
+          <Cell n="04" titleKey="lab.e4t" descKey="lab.e4d" className="md:col-span-7 h-[240px] sm:h-[300px]">
             <ImageDistort />
           </Cell>
-          <Cell n="05" titleKey="lab5_t" descKey="lab5_d" className="md:col-span-12 h-[150px] sm:h-[180px]">
+          <Cell n="05" titleKey="lab.e5t" descKey="lab.e5d" className="md:col-span-12 h-[150px] sm:h-[180px]">
             <ScrollPhysics />
           </Cell>
-          <Cell n="06" titleKey="lab6_t" descKey="lab6_d" className="md:col-span-12 h-[220px] sm:h-[240px]">
+          <Cell n="06" titleKey="lab.e6t" descKey="lab.e6d" className="md:col-span-12 h-[220px] sm:h-[240px]">
             <AIFlow />
           </Cell>
         </FadeUp>

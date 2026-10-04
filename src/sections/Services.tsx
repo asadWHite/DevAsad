@@ -2,27 +2,28 @@ import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
-import { useLang } from "../i18n";
-import { SectionLabel, FadeUp } from "../components/ui";
-import { services, fmtUZS, type Service, type ServiceTag } from "../data/services";
-import Magnetic from "../components/Magnetic";
-import MobileServices from "./MobileServices";
-import TelegramIcon from "../components/TelegramIcon";
-import { tgUrl } from "../data/contacts";
+import { useI18n, type Messages, type StringPaths } from "@/i18n";
+import { SectionLabel, FadeUp } from "@/components/ui";
+import { services, type Service, type ServiceTag } from "@/data/services";
+import Magnetic from "@/components/Magnetic";
+import MobileServices from "@/sections/MobileServices";
+import TelegramIcon from "@/components/TelegramIcon";
+import { tgUrl } from "@/data/contacts";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FILTERS: { key: string; labelKey: string; match: (s: Service) => boolean }[] = [
-  { key: "all", labelKey: "f_all", match: () => true },
-  { key: "web", labelKey: "f_web", match: (s) => s.tags.includes("web") },
-  { key: "telegram", labelKey: "f_telegram", match: (s) => s.tags.includes("telegram") },
-  { key: "app", labelKey: "f_app", match: (s) => s.tags.includes("app") },
-  { key: "design", labelKey: "f_design", match: (s) => s.tags.includes("design") },
-  { key: "ai", labelKey: "f_ai", match: (s) => s.tags.includes("ai" as ServiceTag) },
+const FILTERS: { key: string; labelKey: StringPaths<Messages>; match: (s: Service) => boolean }[] = [
+  { key: "all", labelKey: "filters.all", match: () => true },
+  { key: "web", labelKey: "filters.web", match: (s) => s.tags.includes("web") },
+  { key: "telegram", labelKey: "filters.telegram", match: (s) => s.tags.includes("telegram") },
+  { key: "app", labelKey: "filters.app", match: (s) => s.tags.includes("app") },
+  { key: "design", labelKey: "filters.design", match: (s) => s.tags.includes("design") },
+  { key: "ai", labelKey: "filters.ai", match: (s) => s.tags.includes("ai" as ServiceTag) },
 ];
 
 /* animated price that morphs when level changes */
-function MorphPrice({ value, quote, lang }: { value: number; quote: boolean; lang: string }) {
+function MorphPrice({ value, quote }: { value: number; quote: boolean }) {
+  const { num } = useI18n();
   const ref = useRef<HTMLSpanElement>(null);
   const obj = useRef({ v: value });
   useLayoutEffect(() => {
@@ -37,26 +38,25 @@ function MorphPrice({ value, quote, lang }: { value: number; quote: boolean; lan
       duration: 0.55,
       ease: "power2.out",
       onUpdate: () => {
-        if (ref.current) ref.current.textContent = fmtUZS(obj.current.v);
+        if (ref.current) ref.current.textContent = num(obj.current.v);
       },
     });
     return () => {
       tween.kill();
     };
-  }, [value, quote, lang]);
+  }, [value, quote, num]);
   return (
     <span className="display- font-extrabold tabular-nums tracking-tight" style={{ fontSize: "clamp(30px, 3.4vw, 52px)" }}>
-      {quote ? null : <span ref={ref}>{fmtUZS(value)}</span>}
+      {quote ? null : <span ref={ref}>{num(value)}</span>}
     </span>
   );
 }
 
 function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void }) {
-  const { t, lang } = useLang();
+  const { t, loc } = useI18n();
   const [lvl, setLvl] = useState(0);
-  const current = s.levels[Math.min(lvl, s.levels.length - 1)];
+  const current = s.levels[Math.min(lvl, s.levels.length - 1)]!;
   const isQuote = !!current.extra;
-  const features = t(s.inclKey).split(",");
 
   return (
     <article
@@ -72,24 +72,24 @@ function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void 
             <span className="mono text-[10px] tracking-[0.2em] text-smoke pt-2">{s.num}</span>
             <div>
               <h3 className="display- font-extrabold text-ink group-hover:text-navy transition-colors duration-400" style={{ fontSize: "clamp(30px, 4vw, 58px)" }}>
-                {t(s.titleKey)}
+                {loc(s.title)}
               </h3>
-              <p className="mt-3 text-[14px] sm:text-[15px] leading-relaxed text-ink/70 max-w-md">{t(s.descKey)}</p>
+              <p className="mt-3 text-[14px] sm:text-[15px] leading-relaxed text-ink/70 max-w-md">{loc(s.desc)}</p>
             </div>
           </div>
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <p className="mono text-[8px] tracking-[0.24em] text-navy mb-2">{t("svc_best")}</p>
-              <p className="text-[12px] leading-relaxed text-ink/65">{t(s.forKey)}</p>
+              <p className="mono text-[8px] tracking-[0.24em] text-navy mb-2">{t("services.bestFor")}</p>
+              <p className="text-[12px] leading-relaxed text-ink/65">{loc(s.forWhom)}</p>
             </div>
             <div>
-              <p className="mono text-[8px] tracking-[0.24em] text-navy mb-2">{t("svc_incl")}</p>
-              <p className="text-[12px] leading-relaxed text-ink/65">{features.join(" · ")}</p>
+              <p className="mono text-[8px] tracking-[0.24em] text-navy mb-2">{t("services.included")}</p>
+              <p className="text-[12px] leading-relaxed text-ink/65">{loc(s.included)}</p>
             </div>
           </div>
-          {s.exampleKey && (
+          {s.example && (
             <p className="mono mt-5 text-[9px] tracking-[0.2em] text-smoke">
-              {t("svc_example")}: <span className="text-navy font-semibold">{s.exampleKey}</span>
+              {t("services.example")}: <span className="text-navy font-semibold">{s.example}</span>
             </p>
           )}
         </div>
@@ -100,7 +100,7 @@ function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void 
             <div className="flex flex-wrap gap-x-5 gap-y-1.5">
               {s.levels.map((l, i) => (
                 <button
-                  key={l.nameKey}
+                  key={loc(l.name)}
                   onMouseEnter={() => setLvl(i)}
                   onFocus={() => setLvl(i)}
                   onClick={() => setLvl(i)}
@@ -108,29 +108,29 @@ function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void 
                     lvl === i ? "text-navy border-navy font-semibold" : "text-smoke border-transparent hover:text-navy"
                   }`}
                 >
-                  {t(l.nameKey)}
+                  {loc(l.name)}
                 </button>
               ))}
             </div>
             <div className="mt-5 flex items-baseline gap-3 flex-wrap">
-              <span className="mono text-[9px] tracking-[0.22em] text-smoke">{isQuote ? "" : t("svc_from")}</span>
+              <span className="mono text-[9px] tracking-[0.22em] text-smoke">{isQuote ? "" : t("services.from")}</span>
               {isQuote ? (
                 <span className="display- font-extrabold text-steel" style={{ fontSize: "clamp(24px, 2.8vw, 42px)" }}>
-                  {t("svc_custom")}
+                  {t("services.customQuote")}
                 </span>
               ) : (
                 <>
                   <span className="text-navy">
-                    <MorphPrice value={current.price} quote={false} lang={lang} />
+                    <MorphPrice value={current.price} quote={false} />
                   </span>
-                  <span className="mono text-[10px] tracking-[0.18em] text-smoke">+ {t("svc_uzs")}</span>
+                  <span className="mono text-[10px] tracking-[0.18em] text-smoke">+ {t("services.uzs")}</span>
                 </>
               )}
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4 flex-wrap">
-            <p className="mono text-[8px] tracking-[0.18em] text-smoke max-w-[340px] leading-relaxed">{t("svc_disclaimer")}</p>
+            <p className="mono text-[8px] tracking-[0.18em] text-smoke max-w-[340px] leading-relaxed">{t("services.disclaimer")}</p>
             <Magnetic strength={0.35}>
               <a
                 href={tgUrl()}
@@ -140,7 +140,7 @@ function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void 
                 data-cursor="open"
                 className="group/b inline-flex items-center gap-2.5 mono text-[10px] tracking-[0.18em] px-5 py-3.5 bg-navy text-paper hover:bg-abyss transition-colors duration-400"
               >
-                <TelegramIcon size={14} /> {t("cta_float")}
+                <TelegramIcon size={14} /> {t("actions.discussProject")}
                 <ArrowUpRight size={13} className="transition-transform duration-300 group-hover/b:translate-x-0.5 group-hover/b:-translate-y-0.5" />
               </a>
             </Magnetic>
@@ -152,7 +152,7 @@ function ServiceRow({ s, onOrder }: { s: Service; onOrder: (id: string) => void 
 }
 
 export default function Services() {
-  const { t } = useLang();
+  const { t } = useI18n();
   const root = useRef<HTMLElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState("all");
@@ -177,17 +177,17 @@ export default function Services() {
   return (
     <section id="services" ref={root} className="relative bg-paper py-24 sm:py-36">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-        <SectionLabel index="03" text={t("svc_kicker")} right={`07 / ${t("cat_title")}`} />
+        <SectionLabel index="03" text={t("services.kicker")} right={`07 / ${t("catalogue.title")}`} />
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           <div className="lg:col-span-7">
             <h2 className="display- font-extrabold text-ink" style={{ fontSize: "clamp(46px, 7.5vw, 115px)" }}>
-              {t("svc_title")}
+              {t("services.title")}
               <span className="text-navy">.</span>
             </h2>
           </div>
           <FadeUp delay={0.15} className="lg:col-span-5">
-            <p className="text-[15px] sm:text-[16px] leading-relaxed text-ink/70 max-w-md">{t("svc_sub")}</p>
-            <p className="mono mt-4 text-[9px] tracking-[0.16em] text-navy leading-relaxed">{t("svc_disclaimer")}</p>
+            <p className="text-[15px] sm:text-[16px] leading-relaxed text-ink/70 max-w-md">{t("services.sub")}</p>
+            <p className="mono mt-4 text-[9px] tracking-[0.16em] text-navy leading-relaxed">{t("services.disclaimer")}</p>
           </FadeUp>
         </div>
 
@@ -197,7 +197,7 @@ export default function Services() {
         </div>
 
         {/* editorial filter (desktop) */}
-        <div className="hidden md:flex mt-12 flex-wrap gap-x-7 gap-y-3" role="tablist" aria-label="Filter">
+        <div className="hidden md:flex mt-12 flex-wrap gap-x-7 gap-y-3" role="tablist" aria-label={t("a11y.serviceFilters")}>
           {FILTERS.map((f) => (
             <button
               key={f.key}
@@ -222,11 +222,12 @@ export default function Services() {
 
         <FadeUp className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 mono text-[9px] tracking-[0.2em] text-smoke">
           <span>
-            {t("svc_example")}: {Object.keys(services).length ? "" : ""}
-            <span className="text-navy font-semibold"> 2.5M+ / 8.5M+ / 15M+ </span> UZS
+            {t("services.examplesLine")}:{" "}
+            <span className="text-navy font-semibold">2.5M+ / 8.5M+ / 15M+ </span>
+            {t("services.uzs")}
           </span>
           <a href="#estimator" data-cursor="link" className="u-sweep text-navy">
-            {t("est_title")} →
+            {t("estimator.title")} →
           </a>
         </FadeUp>
       </div>

@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- §17/§18 — every locale is a real, indexable address with correct hreflang pairs -->
   <url>
-    <loc>https://asadbek.uz/</loc>
+    <loc>https://asadbek.uz/uz/</loc>
     <lastmod>2026-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="uz" href="https://asadbek.uz/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://asadbek.uz/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://asadbek.uz/"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://asadbek.uz/uz/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://asadbek.uz/ru/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://asadbek.uz/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://asadbek.uz/ru/"/>
+  </url>
+  <url>
+    <loc>https://asadbek.uz/ru/</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://asadbek.uz/uz/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://asadbek.uz/ru/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://asadbek.uz/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://asadbek.uz/ru/"/>
+  </url>
+  <url>
+    <loc>https://asadbek.uz/en/</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://asadbek.uz/uz/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://asadbek.uz/ru/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://asadbek.uz/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://asadbek.uz/ru/"/>
   </url>
 </urlset>

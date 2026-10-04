@@ -1,18 +1,18 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLang } from "../i18n";
-import { SectionLabel, RevealLine, ClipImage, FadeUp } from "../components/ui";
-import { projects, statusKey } from "../data/projects";
+import { useI18n } from "@/i18n";
+import { SectionLabel, RevealLine, ClipImage, FadeUp } from "@/components/ui";
+import { projects, statusMessageKey, EDUCRM_SCREENS } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Educrm() {
-  const { t } = useLang();
+  const { t, loc } = useI18n();
   const root = useRef<HTMLElement>(null);
   const [activeNode, setActiveNode] = useState(0);
-  const p = projects[2];
-  const nodes = ["e_scr1", "e_scr2", "e_scr3", "e_scr4", "e_scr5"];
+  const p = projects[2]!;
+  const nodes = loc(EDUCRM_SCREENS);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -54,45 +54,45 @@ export default function Educrm() {
   return (
     <section ref={root} className="relative bg-mist/60 py-24 sm:py-36">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-        <SectionLabel index="03" text="EDUCRM" right={`${t("p_status")}: ${t(statusKey[p.status])}`} />
+        <SectionLabel index={p.number} text={p.brand} right={`${t("labels.status")}: ${t(statusMessageKey[p.status])}`} />
 
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
           <div className="lg:col-span-8">
             <RevealLine>
               <h2 className="display- font-extrabold text-ink" style={{ fontSize: "clamp(56px, 9.5vw, 150px)" }}>
-                EDUCRM<span className="text-navy">.</span>
+                {p.brand}<span className="text-navy">.</span>
               </h2>
             </RevealLine>
             <FadeUp delay={0.15}>
-              <p className="mono mt-4 text-[10px] sm:text-[11px] tracking-[0.24em] text-navy">{t("e_cat")}</p>
+              <p className="mono mt-4 text-[10px] sm:text-[11px] tracking-[0.24em] text-navy">{loc(p.c.category)}</p>
             </FadeUp>
           </div>
           <FadeUp delay={0.2} className="lg:col-span-4">
             <span className="mono inline-block text-[9px] tracking-[0.22em] text-steel border border-steel/40 px-3 py-1.5 rotate-[-1.5deg]">
-              {t("st_concept")}
+              {t(statusMessageKey[p.status])}
             </span>
           </FadeUp>
         </div>
 
         <FadeUp delay={0.1} className="mt-10 max-w-3xl">
-          <p className="text-[17px] sm:text-[21px] leading-relaxed text-ink/80 text-balance">{t("e_lead")}</p>
-          <p className="mt-4 text-[15px] sm:text-[16px] leading-relaxed text-ink/60 max-w-2xl">{t("e_owner")}</p>
+          <p className="text-[17px] sm:text-[21px] leading-relaxed text-ink/80 text-balance">{loc(p.c.lead)}</p>
+          <p className="mt-4 text-[15px] sm:text-[16px] leading-relaxed text-ink/60 max-w-2xl">{loc(p.cs.solution!.body)}</p>
         </FadeUp>
 
         {/* dashboard visual */}
         <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           <div className="lg:col-span-9">
-            <ClipImage src="/images/educrm-dash.jpg" alt={t("alt_educrm")} caption={`${t("e_scr1")} · ${t("st_concept")} UI`} className="aspect-[16/10] sm:aspect-[16/9] h-full" parallax={5} cropTop={8} />
+            <ClipImage src="/images/educrm-dash.jpg" alt={loc(p.c.alt)} caption={`${nodes[0]} · ${t(statusMessageKey[p.status])} UI`} className="aspect-[16/10] sm:aspect-[16/9] h-full" parallax={5} cropTop={8} />
           </div>
           <div className="lg:col-span-3 flex flex-col gap-4">
             <div className="bg-pure p-6 flex-1 flex flex-col justify-between border border-line">
-              <p className="mono text-[9px] tracking-[0.24em] text-navy">WEB ADMIN</p>
-              <p className="display- mt-6 font-extrabold text-ink text-3xl leading-tight">{t("e_scr4")} +<br />{t("e_scr3")}</p>
-              <p className="mono mt-6 text-[9px] leading-loose tracking-[0.14em] text-smoke">{t("e_note")}</p>
+              <p className="mono text-[9px] tracking-[0.24em] text-navy">{t("educrm.webAdmin")}</p>
+              <p className="display- mt-6 font-extrabold text-ink text-3xl leading-tight">{nodes[3]} +<br />{nodes[2]}</p>
+              <p className="mono mt-6 text-[9px] leading-loose tracking-[0.14em] text-smoke">{loc(p.c.note!)}</p>
             </div>
             <div className="bg-navy p-6 text-paper">
-              <p className="mono text-[9px] tracking-[0.24em] text-paper/60">TELEGRAM</p>
-              <p className="display- mt-3 font-extrabold text-2xl">BOT + MINI APP</p>
+              <p className="mono text-[9px] tracking-[0.24em] text-paper/60">{t("educrm.telegram")}</p>
+              <p className="display- mt-3 font-extrabold text-2xl">{t("educrm.botMiniApp")}</p>
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function Educrm() {
                   0{i + 1}
                 </span>
                 <span className={`display- block mt-2 font-bold text-[15px] sm:text-[17px] leading-tight transition-colors ${activeNode === i ? "text-navy" : "text-ink"}`}>
-                  {t(n)}
+                  {n}
                 </span>
               </button>
             ))}
@@ -125,11 +125,11 @@ export default function Educrm() {
         </div>
 
         <FadeUp className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3">
-          <p className="mono text-[10px] tracking-[0.2em] text-smoke">{t("e_lang")}</p>
-          <p className="mono text-[10px] tracking-[0.2em] text-navy">NEXT.JS · TYPESCRIPT · TAILWIND · SUPABASE · POSTGRES · AUTH · RLS · STORAGE · TELEGRAM WEBAPP</p>
+          <p className="mono text-[10px] tracking-[0.2em] text-smoke">{loc(p.cs.technology!.note!)}</p>
+          <p className="mono text-[10px] tracking-[0.2em] text-navy">{p.tech.join(" · ").toUpperCase()}</p>
         </FadeUp>
         <FadeUp className="mt-6 max-w-2xl">
-          <p className="text-[13px] leading-relaxed text-smoke italic">{t("e_concept_note")}</p>
+          <p className="text-[13px] leading-relaxed text-smoke italic">{loc(p.cs.status!.body)}</p>
         </FadeUp>
       </div>
     </section>

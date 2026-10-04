@@ -1,14 +1,14 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLang } from "../i18n";
-import { SectionLabel } from "../components/ui";
-import { projects, statusKey } from "../data/projects";
+import { useI18n } from "@/i18n";
+import { SectionLabel } from "@/components/ui";
+import { projects, statusMessageKey } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HorizontalStory() {
-  const { t, lang } = useLang();
+  const { t, loc } = useI18n();
   const root = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -78,10 +78,10 @@ export default function HorizontalStory() {
       <div data-hs-outer className="relative">
         <div data-hs-pin-wrap className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col bg-paper">
           <div className="px-5 sm:px-10 pt-24 shrink-0">
-            <SectionLabel index="05" text={t("ha_kicker")} right={t("ha_hint")} />
+            <SectionLabel index="05" text={t("archive.kicker")} right={t("archive.hint")} />
             <div className="mt-8 flex items-end justify-between gap-6">
               <h2 className="display- font-extrabold text-ink" style={{ fontSize: "clamp(38px, 5.5vw, 84px)" }}>
-                {t("ha_title")}
+                {t("archive.title")}
               </h2>
               <div className="hidden md:block w-40 h-px bg-line relative overflow-hidden mb-3">
                 <div data-hs-bar className="absolute inset-0 bg-navy origin-left scale-x-0" />
@@ -105,9 +105,9 @@ export default function HorizontalStory() {
                     {p.number}
                   </span>
                   <div>
-                    <p className="mono text-[9px] tracking-[0.26em] text-navy">{t(p.catKey)}</p>
+                    <p className="mono text-[9px] tracking-[0.26em] text-navy">{loc(p.c.category)}</p>
                     <h3 className="display- mt-3 font-extrabold text-ink group-hover:text-navy transition-colors duration-500" style={{ fontSize: "clamp(38px, 4.6vw, 76px)" }}>
-                      {p.title}
+                      {p.brand}
                     </h3>
                   </div>
 
@@ -116,29 +116,29 @@ export default function HorizontalStory() {
                       <img
                         data-hs-img
                         src={p.image}
-                        alt={t(p.altKey ?? "alt_ustatop")}
+                        alt={loc(p.c.alt)}
                         loading="lazy"
                         className="w-full h-full object-cover will-change-transform scale-110"
                       />
                     ) : (
                       /* UstaTop: real sayt — typographic coming-soon. No fake screens. */
                       <div className="w-full h-full bg-navy text-paper flex flex-col justify-center gap-3 px-6">
-                        <span className="mono text-[8px] tracking-[0.22em] text-paper/50">COMING SOON · REAL SITE</span>
+                        <span className="mono text-[8px] tracking-[0.22em] text-paper/50">{t("archive.comingSoon")}</span>
                         <span className="display- font-extrabold text-xl sm:text-2xl leading-tight">
-                          MUAMMOINGIZ BORMI? USTASINI TOPAMIZ.
+                          {t("archive.ustatopPitch")}
                         </span>
-                        <span className="mono text-[8px] tracking-[0.18em] text-paper/50">WAITLIST · 8 XIZMAT YO'NALISHI</span>
+                        <span className="mono text-[8px] tracking-[0.18em] text-paper/50">{t("archive.waitlistNote")}</span>
                       </div>
                     )}
                     <span className="mono absolute bottom-2.5 left-2.5 text-[8px] tracking-[0.2em] bg-paper/90 text-navy px-2 py-1">
-                      {p.year} — {t(statusKey[p.status])}
+                      {p.year} — {t(statusMessageKey[p.status])}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-4">
-                    <p className="text-[13px] sm:text-[14px] text-ink/65 leading-snug max-w-[38ch] line-clamp-2">{t(p.leadKey)}</p>
+                    <p className="text-[13px] sm:text-[14px] text-ink/65 leading-snug max-w-[38ch] line-clamp-2">{loc(p.c.lead)}</p>
                     <span className="mono shrink-0 text-[9px] tracking-[0.22em] text-smoke">
-                      {lang === "ru" ? "ЛИСТАЙТЕ" : "SCROLL"} →
+                      {t("actions.scroll")} →
                     </span>
                   </div>
                 </article>
@@ -146,9 +146,9 @@ export default function HorizontalStory() {
 
               {/* end plate */}
               <div className="shrink-0 w-[60vw] md:w-[34vw] h-[68vh] md:h-full snap-center bg-navy text-paper flex flex-col items-start justify-center gap-6 px-8">
-                <p className="mono text-[9px] tracking-[0.26em] text-paper/60">{t("cat_kicker")}</p>
+                <p className="mono text-[9px] tracking-[0.26em] text-paper/60">{t("catalogue.kicker")}</p>
                 <a href="#index" data-cursor="view" className="display- font-extrabold text-4xl sm:text-5xl leading-tight u-sweep">
-                  {t("cat_title")} →
+                  {t("catalogue.title")} →
                 </a>
               </div>
             </div>
