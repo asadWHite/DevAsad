@@ -6,6 +6,8 @@ import { useLang } from "../i18n";
 import { SectionLabel, FadeUp } from "../components/ui";
 import { projects, statusKey } from "../data/projects";
 import Magnetic from "../components/Magnetic";
+import TelegramIcon from "../components/TelegramIcon";
+import { tgUrl } from "../data/contacts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -301,8 +303,8 @@ export default function Ustatop() {
                 <Bot size={18} />
                 <p className="mono text-[10px] tracking-[0.24em]">{t("u_bot")}</p>
               </div>
-              <a href="https://t.me/UstTop_bot" target="_blank" rel="noopener noreferrer" data-cursor="open" className="u-sweep mt-4 inline-block display- font-bold text-ink text-2xl sm:text-3xl hover:text-navy transition-colors">
-                @UstTop_bot
+              <a href={tgUrl()} target="_blank" rel="noopener noreferrer" data-cursor="talk" className="mt-4 inline-flex items-center gap-3 display- font-bold text-ink text-2xl sm:text-3xl hover:text-navy transition-colors">
+                <TelegramIcon size={22} /> @Xidoyatovvv
               </a>
             </FadeUp>
           </div>
