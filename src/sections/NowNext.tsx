@@ -1,34 +1,34 @@
 import { Plus } from "lucide-react";
-import { useLang } from "../i18n";
-import { SectionLabel, RevealLine, FadeUp } from "../components/ui";
+import { useI18n } from "@/i18n";
+import { SectionLabel, RevealLine, FadeUp } from "@/components/ui";
 
 export default function NowNext() {
-  const { t } = useLang();
+  const { t } = useI18n();
   const nowItems = [
-    { t: "now_b1_t", b: "now_b1_b" },
-    { t: "now_b2_t", b: "now_b2_b" },
-    { t: "now_b3_t", b: "now_b3_b" },
-    { t: "now_b4_t", b: "now_b4_b" },
-  ];
-  const nextItems = ["nx_i1", "nx_i2", "nx_i3", "nx_i4", "nx_i5", "nx_i6"];
+    { t: "now.b1t", b: "now.b1b" },
+    { t: "now.b2t", b: "now.b2b" },
+    { t: "now.b3t", b: "now.b3b" },
+    { t: "now.b4t", b: "now.b4b" },
+  ] as const;
+  const nextItems = ["next.i1", "next.i2", "next.i3", "next.i4", "next.i5", "next.i6"] as const;
 
   return (
     <>
       {/* ---------------- NOW — calm ---------------- */}
       <section className="relative bg-pure py-24 sm:py-36 border-t border-line">
         <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-          <SectionLabel index="10" text={t("now_kicker")} right="2026" />
+          <SectionLabel index="10" text={t("now.kicker")} right="2026" />
           <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4">
               <RevealLine>
                 <h2 className="display- font-extrabold text-ink" style={{ fontSize: "clamp(56px, 8vw, 120px)" }}>
-                  {t("now_title")}
+                  {t("now.title")}
                   <span className="text-navy">.</span>
                 </h2>
               </RevealLine>
               <FadeUp delay={0.2} className="mt-6 mono text-[10px] tracking-[0.24em] text-smoke">
                 <p className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-navy animate-pulse-dot" /> {t("hero_availability")}
+                  <span className="w-1.5 h-1.5 rounded-full bg-navy animate-pulse-dot" /> {t("hero.availability")}
                 </p>
               </FadeUp>
             </div>
@@ -52,16 +52,16 @@ export default function NowNext() {
       {/* ---------------- NEXT — dark navy ---------------- */}
       <section id="next" className="relative bg-abyss text-paper py-24 sm:py-36">
         <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-          <SectionLabel dark index="11" text={t("nx_kicker")} />
+          <SectionLabel dark index="11" text={t("next.kicker")} />
           <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-5">
               <RevealLine>
                 <h2 className="display- font-extrabold text-paper" style={{ fontSize: "clamp(42px, 6vw, 90px)" }}>
-                  {t("nx_title")}
+                  {t("next.title")}
                 </h2>
               </RevealLine>
               <FadeUp delay={0.15}>
-                <p className="mt-6 text-[15px] sm:text-[16px] leading-relaxed text-paper/60 max-w-md">{t("nx_lead")}</p>
+                <p className="mt-6 text-[15px] sm:text-[16px] leading-relaxed text-paper/60 max-w-md">{t("next.lead")}</p>
               </FadeUp>
               <FadeUp delay={0.25} className="mt-10" aria-hidden>
                 <div className="flex gap-2">

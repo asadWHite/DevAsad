@@ -2,10 +2,10 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { useLang } from "../i18n";
-import Magnetic from "../components/Magnetic";
-import TelegramIcon from "../components/TelegramIcon";
-import { tgUrl } from "../data/contacts";
+import { useI18n } from "@/i18n";
+import Magnetic from "@/components/Magnetic";
+import TelegramIcon from "@/components/TelegramIcon";
+import { tgUrl } from "@/data/contacts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,13 +44,14 @@ function RoleRotator({ words, started }: { words: string[]; started: boolean }) 
 }
 
 export default function Hero({ ready }: { ready: boolean }) {
-  const { t } = useLang();
+  const { t, tl } = useI18n();
   const root = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
   const metaRef2 = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
-  const roles = t("hero_roles").split("¦");
+  /* §16 — brand names stay as-is, so the marquee is intentionally untranslated */
+  const roles = [...tl("hero.roles")];
   const squareRef = useRef<HTMLDivElement>(null);
   const played = useRef(false);
 
@@ -113,7 +114,7 @@ export default function Hero({ ready }: { ready: boolean }) {
       {/* ghost outline word */}
       <div ref={ghostRef} className="pointer-events-none absolute right-[-4%] top-[16%] select-none" aria-hidden>
         <span data-h-ghost className="display- text-stroke text-navy/25 font-extrabold text-[clamp(90px,18vw,280px)] opacity-0">
-          ARXIV
+          {t("hero.ghost")}
         </span>
       </div>
 
@@ -126,13 +127,13 @@ export default function Hero({ ready }: { ready: boolean }) {
 
       <div className="mx-auto w-full max-w-[1600px] px-5 sm:px-10">
         <p data-h-kicker className="mono text-[10px] sm:text-[11px] tracking-[0.3em] text-navy mb-6 sm:mb-10 opacity-0">
-          {t("hero_kicker")}
+          {t("hero.kicker")}
         </p>
 
         {/* mobile statement — app-like first scene */}
         <div className="md:hidden -mt-2 mb-8">
           <h1 className="display- font-extrabold text-ink leading-[0.95]" style={{ fontSize: "clamp(44px, 13.5vw, 92px)" }}>
-            {["intro_m1", "intro_m2", "intro_m3"].map((k, i) => (
+            {(["intro.m1", "intro.m2", "intro.m3"] as const).map((k, i) => (
               <span key={k} className="mask-line">
                 <span data-h-line className={i === 2 ? "text-navy" : ""}>{t(k)}</span>
               </span>
@@ -142,28 +143,28 @@ export default function Hero({ ready }: { ready: boolean }) {
 
         <div ref={titleRef} className="hidden md:block">
           <h1 className="hero-h1 display- font-extrabold text-ink leading-[0.9]" style={{ fontSize: "clamp(46px, 11.5vw, 180px)" }}>
-            <span className="mask-line"><span data-h-line>{t("hero_l1")}</span></span>
+            <span className="mask-line"><span data-h-line>{t("hero.l1")}</span></span>
             <span className="mask-line"><span data-h-line className="inline-flex items-baseline gap-[0.06em]">
-              {t("hero_l2")}<span className="w-[0.13em] h-[0.13em] bg-navy translate-y-[0.05em] self-center" aria-hidden />
+              {t("hero.l2")}<span className="w-[0.13em] h-[0.13em] bg-navy translate-y-[0.05em] self-center" aria-hidden />
             </span></span>
-            <span className="mask-line"><span data-h-line className="text-navy">{t("hero_l3")}</span></span>
+            <span className="mask-line"><span data-h-line className="text-navy">{t("hero.l3")}</span></span>
           </h1>
         </div>
 
         <div ref={metaRef} className="mt-10 sm:mt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end" data-h-kicker2>
           <p data-h-meta className="lg:col-span-5 text-[17px] sm:text-[19px] leading-relaxed text-ink/80 max-w-xl opacity-0 text-balance">
-            {t("hero_sub")}
+            {t("hero.sub")}
           </p>
           <div data-h-meta className="lg:col-span-4 mono text-[10px] tracking-[0.22em] text-smoke space-y-2.5 opacity-0">
-            <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-navy" /> {t("hero_meta1")}</p>
-            <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-navy" /> {t("hero_meta2")}</p>
-            <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-navy" /> {t("hero_meta3")}</p>
+            <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-navy" /> {t("hero.meta1")}</p>
+            <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-navy" /> {t("hero.meta2")}</p>
+            <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-navy" /> {t("hero.meta3")}</p>
           </div>
           <div data-h-meta className="lg:col-span-3 flex lg:justify-end opacity-0">
             <div className="flex flex-col items-start gap-3">
               <Magnetic strength={0.35}>
                 <a href={tgUrl()} target="_blank" rel="noopener noreferrer" data-cursor="talk" className="group inline-flex items-center gap-3 bg-paper text-navy border border-navy px-6 py-4 mono text-[10px] tracking-[0.2em] font-semibold hover:bg-navy hover:text-paper transition-colors duration-400">
-                  <TelegramIcon size={15} /> {t("hero_cta1")}
+                  <TelegramIcon size={15} /> {t("hero.cta1")}
                   <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
               </Magnetic>
@@ -172,7 +173,7 @@ export default function Hero({ ready }: { ready: boolean }) {
                   <ArrowDown size={13} className="relative z-10 transition-transform duration-500 group-hover:translate-y-0.5" />
                   <span className="absolute inset-0 bg-navy scale-y-0 origin-bottom transition-transform duration-500 group-hover:scale-y-100" aria-hidden />
                 </span>
-                {t("hero_cta2")}
+                {t("hero.cta2")}
               </a>
             </div>
           </div>

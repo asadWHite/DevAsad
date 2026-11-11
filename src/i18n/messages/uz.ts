@@ -208,9 +208,22 @@ export const uz = {
     kicker: "ARXIV — GORIZONTAL SAHNA",
     title: "TO‘RTTA HIKOYA",
     hint: "Aylantiring — arxiv yonga ochiladi",
+    ustatopPitch: "MUAMMOINGIZ BORMI? USTASINI TOPAMIZ.",
     comingSoon: "TEZ ORADA · HAQIQIY SAYT",
     waitlistNote: "KUTISH RO‘YXATI · 8 TA XIZMAT YO‘NALISHI",
     techLine: "TEXNOLOGIYALAR",
+  },
+
+  /* ─────────── per-project UI labels ─────────── */
+  kashmir: {
+    img1: "Bosh sahifa — to‘liq ekran",
+    img2: "Kolleksiya sahifasi — detal",
+    realStructure: "SAYTNING HAQIQIY TUZILISHI",
+  },
+  educrm: {
+    webAdmin: "VEB ADMIN",
+    telegram: "TELEGRAM",
+    botMiniApp: "BOT + MINI APP",
   },
 
   /* ─────────── services ─────────── */
@@ -331,6 +344,7 @@ export const uz = {
     s5: "MAHSULOT",
     aiBody:
       "AI — xonadagi sehrgar emas, stolimdagi sherik. Men g‘oya beraman, u tezlik beradi; men buzaman, u qayta yig‘ishga yordam beradi.",
+    imageAlt: "Laboratoriya uchun abstrakt tasvir",
     scrollHint: "←SURING→",
     magnet: "MAGNIT",
     motion: "HARAKAT",

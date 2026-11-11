@@ -1,27 +1,44 @@
 <!doctype html>
+<!--
+  §18 — SEO shell. The <title>, meta description, OG/Twitter tags, og:locale,
+  canonical, hreflang and the Person JSON-LD are all rewritten by the app on
+  every locale switch (see src/App.tsx + src/i18n/index.tsx).
+
+  What ships here is the RU default (DEFAULT_LOCALE). Crawlers that never run
+  JS get a coherent, single-language document — never a mix.
+
+  §17 — locale-prefixed URLs: /uz/ /ru/ /en/ are all rewritten to this shell by
+  vercel.json, so every locale is a real, indexable, shareable address.
+-->
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dev.Асад — Личная цифровая студия</title>
+    <title>Dev.Асад — личная цифровая студия</title>
     <meta name="description" content="Dev.Асад — веб-разработчик и создатель цифровых продуктов. Реальные проекты: Kashmir Decor (kashmirdecor.uz) и UstaTop (ustatop360.uz). Сайты, Telegram-боты, приложения. Узбекистан, 2026." />
     <meta name="author" content="Dev.Асад" />
-    <link rel="canonical" href="https://asadbek.uz/" />
+
+    <link rel="canonical" data-href="https://asadbek.uz" href="https://asadbek.uz/ru/" />
+    <link rel="alternate" data-hreflang="uz" hreflang="uz" href="https://asadbek.uz/uz/" />
+    <link rel="alternate" data-hreflang="ru" hreflang="ru" href="https://asadbek.uz/ru/" />
+    <link rel="alternate" data-hreflang="en" hreflang="en" href="https://asadbek.uz/en/" />
+    <link rel="alternate" data-hreflang="x-default" hreflang="x-default" href="https://asadbek.uz/ru/" />
+
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0B1F3A" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ASADBEK" />
-    <meta property="og:title" content="Dev.Асад — Личная цифровая студия" />
+    <meta property="og:title" content="Dev.Асад — личная цифровая студия" />
     <meta property="og:description" content="Реальная работа: kashmirdecor.uz · ustatop360.uz. Сайты, Telegram-боты, мини-приложения, UI/UX и AI." />
     <meta property="og:url" content="https://asadbek.uz/" />
     <meta property="og:image" content="https://kashmirdecor.uz/assets/hero.jpg" />
     <meta property="og:locale" content="ru_RU" />
-    <meta property="og:locale:alternate" content="en_US" />
     <meta property="og:locale:alternate" content="uz_UZ" />
+    <meta property="og:locale:alternate" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Dev.Асад — Личная цифровая студия" />
+    <meta name="twitter:title" content="Dev.Асад — личная цифровая студия" />
     <meta name="twitter:description" content="Реальные проекты: Kashmir Decor · UstaTop. Веб, Telegram, приложения, AI." />
     <meta name="twitter:image" content="https://asadbek.uz/og.jpg" />
 
@@ -31,22 +48,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="ld-person">
     {
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Dev.Асад",
-      "jobTitle": "Web Developer · Product Builder",
-      "nationality": "Uzbekistan",
+      "jobTitle": "Веб-разработчик · создатель продуктов",
+      "address": { "@type": "PostalAddress", "addressCountry": "Узбекистан" },
       "url": "https://asadbek.uz/",
       "knowsLanguage": ["uz", "ru", "en"],
-      "sameAs": ["https://kashmirdecor.uz/", "https://ustatop360.uz/"]
+      "sameAs": ["https://kashmirdecor.uz/", "https://ustatop360.uz/", "https://t.me/Xidoyatovvv"]
     }
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <noscript>ASADBEK — Personal Digital Archive. JavaScript kerak.</noscript>
+    <noscript>ASADBEK — личный цифровой архив. Для работы сайта нужен JavaScript.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

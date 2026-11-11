@@ -4,48 +4,34 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { LangProvider, useLang } from "./i18n";
-import { scrollState } from "./lib/scroll";
-import Cursor from "./components/Cursor";
-import Intro from "./components/Intro";
-import Nav from "./components/Nav";
-import StickyCTA from "./components/StickyCTA";
-import Hero from "./sections/Hero";
-import About from "./sections/About";
-import Kashmir from "./sections/Kashmir";
-import Ustatop from "./sections/Ustatop";
-import Educrm from "./sections/Educrm";
-import Drivera from "./sections/Drivera";
-import HorizontalStory from "./sections/HorizontalStory";
-import Services from "./sections/Services";
-import Estimator from "./sections/Estimator";
-import FaqCompare from "./sections/FaqCompare";
-import Lab from "./sections/Lab";
-import Stack from "./sections/Stack";
-import Process from "./sections/Process";
-import Catalogue from "./sections/Catalogue";
-import NowNext from "./sections/NowNext";
-import Contact from "./sections/Contact";
+import { LOCALE_NATIVE_LABEL, LocaleProvider, useI18n } from "@/i18n";
+import { LocaleAudit } from "@/i18n/LocaleAudit";
+import { scrollState } from "@/lib/scroll";
+import Cursor from "@/components/Cursor";
+import Intro from "@/components/Intro";
+import Nav from "@/components/Nav";
+import StickyCTA from "@/components/StickyCTA";
+import Hero from "@/sections/Hero";
+import About from "@/sections/About";
+import Kashmir from "@/sections/Kashmir";
+import Ustatop from "@/sections/Ustatop";
+import Educrm from "@/sections/Educrm";
+import Drivera from "@/sections/Drivera";
+import HorizontalStory from "@/sections/HorizontalStory";
+import Services from "@/sections/Services";
+import Estimator from "@/sections/Estimator";
+import FaqCompare from "@/sections/FaqCompare";
+import Lab from "@/sections/Lab";
+import Stack from "@/sections/Stack";
+import Process from "@/sections/Process";
+import Catalogue from "@/sections/Catalogue";
+import NowNext from "@/sections/NowNext";
+import Contact from "@/sections/Contact";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const META = {
-  ru: {
-    title: "Dev.Асад — Личная цифровая студия",
-    desc: "Dev.Асад — веб-разработчик и создатель цифровых продуктов. Реальная работа: kashmirdecor.uz · ustatop360.uz. Цены от 1,5 млн сум.",
-  },
-  en: {
-    title: "Dev.Асад — Personal Digital Studio",
-    desc: "Dev.Асад — web developer and digital product builder. Real work: kashmirdecor.uz · ustatop360.uz. Prices from 1.5M UZS.",
-  },
-  uz: {
-    title: "Dev.Асад — Shaxsiy raqamli studiya",
-    desc: "Dev.Асад — veb dasturchi va raqamli mahsulotlar yaratuvchisi. Haqiqiy ishlar: kashmirdecor.uz · ustatop360.uz. Narxlar 1.5 mln so'mdan.",
-  },
-};
-
 function Site() {
-  const { lang, t } = useLang();
+  const { t, locale } = useI18n();
   const [introDone, setIntroDone] = useState(false);
   const [morphing, setMorphing] = useState(false);
   const lenisRef = useRef<Lenis | null>(null);
@@ -103,18 +89,38 @@ function Site() {
     }
   }, [introDone]);
 
-  /* -------- language: metadata + refresh -------- */
+  /* -------- §18 — localized <title>, description, OG, Twitter -------- */
   useEffect(() => {
-    const m = META[lang];
-    document.title = m.title;
-    document.querySelector('meta[name="description"]')?.setAttribute("content", m.desc);
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", m.title);
-    document.querySelector('meta[property="og:description"]')?.setAttribute("content", m.desc);
+    const setMeta = (selector: string, value: string) => {
+      document.querySelector(selector)?.setAttribute("content", value);
+    };
+    document.title = t("meta.title");
+    setMeta('meta[name="description"]', t("meta.description"));
+    setMeta('meta[property="og:title"]', t("meta.ogTitle"));
+    setMeta('meta[property="og:description"]', t("meta.ogDescription"));
+    setMeta('meta[property="og:site_name"]', t("meta.ogSiteName"));
+    setMeta('meta[name="twitter:title"]', t("meta.twitterTitle"));
+    setMeta('meta[name="twitter:description"]', t("meta.twitterDescription"));
+
+    /* structured data — keep jobTitle / nationality in the active locale */
+    const ld = document.getElementById("ld-person");
+    if (ld) {
+      try {
+        const data = JSON.parse(ld.textContent ?? "{}");
+        data.jobTitle = t("meta.jobTitle");
+        if (data.address) data.address.addressCountry = t("meta.nationality");
+        ld.textContent = JSON.stringify(data);
+      } catch {
+        /* malformed JSON-LD in index.html — leave it untouched */
+      }
+    }
+
+    /* Re-measure after the new copy reflows. Scroll position is untouched. */
     const id = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(id);
-  }, [lang]);
+  }, [t, locale]);
 
-  /* -------- premium language switch pulse -------- */
+  /* -------- premium language switch pulse (§13 — no reload) -------- */
   const onLangSwitch = () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     gsap.fromTo(
@@ -149,28 +155,35 @@ function Site() {
         <NowNext />
         <Contact />
       </main>
-      <div className="sr-only" aria-live="polite">
-        {t("intro_archive")} — {lang.toUpperCase()}
+
+      {/* §14 — announced once, from the single locale state */}
+      <div className="sr-only" aria-live="polite" aria-label={t("a11y.liveRegion")}>
+        {`${LOCALE_NATIVE_LABEL[locale]} — ${locale.toUpperCase()}`}
       </div>
+
+      {/* §15 — dev-time mixed-language detector (renders nothing in prod) */}
+      <LocaleAudit />
     </>
   );
 }
 
 export default function App() {
   return (
-    <LangProvider>
+    <LocaleProvider>
       <Site />
       {/*
         Vercel Web Analytics + Speed Insights.
         Mounted exactly once here in the root component (this project is a Vite SPA,
         not Next.js, so there is no app/layout.tsx): one global instance for the whole
-        site, all locales (/uz, /ru, /) and nested paths. Both components render `null`
-        and inject a deferred script, so they add no DOM, no layout shift and never
-        block the intro/hero. Auto pageview tracking is left on (no `route` prop) so
-        client-side history changes are measured by the official script itself.
+        site, all locales (/uz, /ru, /en) and nested paths. Both components render
+        `null` and inject a deferred script, so they add no DOM, no layout shift and
+        never block the intro/hero. Auto pageview tracking is left on (no `route`
+        prop) so client-side history changes are measured by the official script
+        itself — the locale switch rewrites the URL with history.replaceState and is
+        therefore tracked too.
       */}
       <Analytics />
       <SpeedInsights />
-    </LangProvider>
+    </LocaleProvider>
   );
 }

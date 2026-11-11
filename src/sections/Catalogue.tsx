@@ -2,23 +2,23 @@ import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
-import { useLang } from "../i18n";
-import { SectionLabel } from "../components/ui";
-import { projects, statusKey, type ProjectTag } from "../data/projects";
+import { useI18n, type Messages, type StringPaths } from "@/i18n";
+import { SectionLabel } from "@/components/ui";
+import { projects, statusMessageKey, type ProjectTag } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FILTERS: { key: string; labelKey: string; match: (p: (typeof projects)[number]) => boolean }[] = [
-  { key: "all", labelKey: "f_all", match: () => true },
-  { key: "live", labelKey: "f_live", match: (p) => p.tags.includes("live" as ProjectTag) },
-  { key: "products", labelKey: "f_products", match: (p) => p.tags.includes("product" as ProjectTag) },
-  { key: "web", labelKey: "f_web", match: (p) => p.tags.includes("web" as ProjectTag) },
-  { key: "mobile", labelKey: "f_mobile", match: (p) => p.tags.includes("mobile" as ProjectTag) },
-  { key: "exp", labelKey: "f_exp", match: (p) => p.tags.includes("experiment" as ProjectTag) },
+const FILTERS: { key: string; labelKey: StringPaths<Messages>; match: (p: (typeof projects)[number]) => boolean }[] = [
+  { key: "all", labelKey: "filters.all", match: () => true },
+  { key: "live", labelKey: "filters.live", match: (p) => p.tags.includes("live" as ProjectTag) },
+  { key: "products", labelKey: "filters.products", match: (p) => p.tags.includes("product" as ProjectTag) },
+  { key: "web", labelKey: "filters.web", match: (p) => p.tags.includes("web" as ProjectTag) },
+  { key: "mobile", labelKey: "filters.mobile", match: (p) => p.tags.includes("mobile" as ProjectTag) },
+  { key: "exp", labelKey: "filters.experiments", match: (p) => p.tags.includes("experiment" as ProjectTag) },
 ];
 
 export default function Catalogue() {
-  const { t, lang } = useLang();
+  const { t, loc } = useI18n();
   const root = useRef<HTMLElement>(null);
   const [filter, setFilter] = useState("all");
   const listRef = useRef<HTMLDivElement>(null);
@@ -70,13 +70,13 @@ export default function Catalogue() {
   return (
     <section id="index" ref={root} className="relative bg-paper py-24 sm:py-36">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-        <SectionLabel index="09" text={t("cat_kicker")} right={`${visible.length}/06`} />
+        <SectionLabel index="09" text={t("catalogue.kicker")} right={`${visible.length}/06 ${t("catalogue.shown")}`} />
         <h2 className="display- mt-10 font-extrabold text-ink" style={{ fontSize: "clamp(44px, 6.5vw, 100px)" }}>
-          {t("cat_title")}<span className="text-navy">.</span>
+          {t("catalogue.title")}<span className="text-navy">.</span>
         </h2>
 
         {/* filters */}
-        <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3" role="tablist" aria-label="Filter">
+        <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3" role="tablist" aria-label={t("a11y.projectFilters")}>
           {FILTERS.map((f) => (
             <button
               key={f.key}
@@ -100,16 +100,16 @@ export default function Catalogue() {
               <>
                 <span className="mono text-[10px] tracking-[0.2em] text-smoke w-10 shrink-0">{p.number}</span>
                 <span className="display- flex-1 font-extrabold text-ink group-hover:text-navy group-hover:translate-x-2 transition-all duration-500 text-[clamp(22px,3.4vw,48px)] leading-none">
-                  {p.title}
+                  {p.brand}
                 </span>
-                <span className="hidden md:block mono text-[9px] tracking-[0.2em] text-smoke w-56">{t(p.catKey)}</span>
+                <span className="hidden md:block mono text-[9px] tracking-[0.2em] text-smoke w-56">{loc(p.c.category)}</span>
                 <span className="hidden sm:block mono text-[10px] text-smoke w-14">{p.year}</span>
                 <span
                   className={`mono text-[8px] sm:text-[9px] tracking-[0.16em] px-2 py-1 w-28 sm:w-32 text-center ${
                     p.status === "live" || p.status === "live_dev" ? "bg-navy text-paper" : "border border-line text-smoke"
                   }`}
                 >
-                  {t(statusKey[p.status])}
+                  {t(statusMessageKey[p.status])}
                 </span>
                 <ArrowUpRight size={18} className="text-smoke group-hover:text-navy group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-400 shrink-0" />
               </>
@@ -139,7 +139,8 @@ export default function Catalogue() {
         </div>
 
         <p className="mono mt-8 text-[9px] tracking-[0.2em] text-smoke">
-          {lang === "ru" ? "ТЕХНОЛОГИИ:" : "TECH:"} NEXT.JS · REACT · TYPESCRIPT · SUPABASE · TELEGRAM · KOTLIN · GSAP
+          {t("catalogue.techLine")}:{" "}
+          {[...new Set(projects.flatMap((p) => p.tech))].slice(0, 7).join(" · ").toUpperCase()}
         </p>
       </div>
 

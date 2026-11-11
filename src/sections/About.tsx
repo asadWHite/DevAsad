@@ -1,18 +1,19 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLang } from "../i18n";
-import { SectionLabel } from "../components/ui";
+import { useI18n } from "@/i18n";
+import { SectionLabel } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* Both chapters are message-tree paths, not literal copy. */
 const CHAPTERS = [
-  { n: "01", t: "about_ch2_t", b: "about_ch2_b" },
-  { n: "02", t: "about_ch3_t", b: "about_ch3_b" },
-];
+  { n: "01", t: "about.buildTitle", b: "about.buildBody" },
+  { n: "02", t: "about.thinkTitle", b: "about.thinkBody" },
+] as const;
 
 export default function About() {
-  const { t } = useLang();
+  const { t } = useI18n();
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
 
@@ -60,12 +61,12 @@ export default function About() {
   return (
     <section id="about" ref={root} className="relative bg-pure py-24 sm:py-36">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-        <SectionLabel index="01" text={t("nav_about").toUpperCase()} right={t("about_kicker")} />
+        <SectionLabel index="01" text={t("nav.about").toUpperCase()} right={t("about.kicker")} />
 
         <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* sticky left meta */}
           <div className="hidden lg:flex lg:col-span-3 flex-col sticky top-32 self-start h-fit">
-            <p className="display- font-extrabold text-ink text-4xl xl:text-5xl leading-none">{t("about_title")}</p>
+            <p className="display- font-extrabold text-ink text-4xl xl:text-5xl leading-none">{t("about.title")}</p>
             <div className="mt-10 flex gap-5">
               <div className="relative w-px h-56 bg-line overflow-hidden">
                 <div data-ab-line className="absolute inset-0 bg-navy origin-top" />

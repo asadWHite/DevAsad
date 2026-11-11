@@ -1,12 +1,15 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import { useLang } from "../i18n";
+import { useI18n } from "@/i18n";
 
 export default function Intro({ onDone, onMorphStart }: { onDone: () => void; onMorphStart: () => void }) {
-  const { t } = useLang();
+  const { t } = useI18n();
   const root = useRef<HTMLDivElement>(null);
   const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
-  const bigWords = isMobile ? ["intro_m1", "intro_m2", "intro_m3"] : ["intro_w1", "intro_w2", "intro_w3", "intro_w4"];
+  const MOBILE_WORDS = ["intro.m1", "intro.m2", "intro.m3"] as const;
+  const DESKTOP_WORDS = ["intro.w1", "intro.w2", "intro.w3", "intro.w4"] as const;
+  const bigWords: readonly (typeof MOBILE_WORDS[number] | typeof DESKTOP_WORDS[number])[] =
+    isMobile ? MOBILE_WORDS : DESKTOP_WORDS;
 
   useLayoutEffect(() => {
     const seen = localStorage.getItem("asdb-seen") === "1";
@@ -148,7 +151,7 @@ export default function Intro({ onDone, onMorphStart }: { onDone: () => void; on
       className="fixed inset-0 z-[120] bg-paper flex items-center justify-center"
       style={{ clipPath: "inset(0% 0% 0% 0%)" }}
       role="dialog"
-      aria-label="Intro"
+      aria-label={t("a11y.intro")}
     >
       <div className="absolute top-0 left-0 w-full h-[2px] bg-line/60">
         <div data-i-prog className="h-full w-full bg-navy origin-left" style={{ transform: "scaleX(0)" }} aria-hidden />
@@ -156,15 +159,15 @@ export default function Intro({ onDone, onMorphStart }: { onDone: () => void; on
 
       {/* phase 01 meta */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" aria-hidden>
-        {["intro_archive", "Dev.Асад", "2026"].map((key, i) => (
+        {(["intro.archive", null, "2026"] as const).map((key, i) => (
           <span
-            key={key}
+            key={i}
             data-im
             className={`mono tracking-[0.28em] opacity-0 ${
               i === 1 ? "text-[15px] font-semibold text-ink" : "text-[10px] text-navy"
             }`}
           >
-            {i === 1 ? key : t(key)}
+            {i === 1 ? "Dev.Асад" : t(key as "intro.archive")}
           </span>
         ))}
       </div>
@@ -207,20 +210,20 @@ export default function Intro({ onDone, onMorphStart }: { onDone: () => void; on
           Dev.Асад
         </span>
         <span data-irole className="mono mt-5 text-[10px] sm:text-[11px] tracking-[0.3em] text-navy opacity-0">
-          {t("intro_role1")} · {t("intro_role2")}
+          {t("intro.role1")} · {t("intro.role2")}
         </span>
         <span data-irole className="mono mt-2 text-[9px] sm:text-[10px] tracking-[0.3em] text-smoke opacity-0">
-          {t("intro_loc")}
+          {t("intro.loc")}
         </span>
       </div>
 
       {/* phase 05 statement (desktop) */}
       <div className="absolute inset-0 hidden md:flex flex-col items-center justify-center text-center px-6 gap-2 sm:gap-3" aria-hidden>
         <span data-is="0" className="display- block font-extrabold text-navy text-[clamp(34px,7vw,96px)]" style={{ clipPath: "inset(0 0 100% 0)" }}>
-          {t("intro_s1")}
+          {t("intro.s1")}
         </span>
         <span data-is="1" className="display- block font-extrabold text-ink text-[clamp(34px,7vw,96px)]" style={{ clipPath: "inset(100% 0 0 0)" }}>
-          {t("intro_s2")}
+          {t("intro.s2")}
         </span>
       </div>
 
@@ -228,7 +231,7 @@ export default function Intro({ onDone, onMorphStart }: { onDone: () => void; on
         onClick={skip}
         className="absolute bottom-6 right-6 mono text-[10px] tracking-[0.24em] text-smoke hover:text-navy border border-line hover:border-navy px-4 py-2.5 transition-colors duration-300 z-10"
       >
-        {t("intro_skip")} →
+        {t("intro.skip")} →
       </button>
     </div>
   );

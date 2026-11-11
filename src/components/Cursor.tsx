@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useLang } from "../i18n";
+import { useI18n } from "@/i18n";
 
 type CursorMode = "default" | "link" | "view" | "open" | "talk";
 
 export default function Cursor() {
-  const { lang, t } = useLang();
+  const { t } = useI18n();
   const [enabled, setEnabled] = useState(false);
   const [mode, setMode] = useState<CursorMode>("default");
   const dotRef = useRef<HTMLDivElement>(null);
@@ -47,14 +47,14 @@ export default function Cursor() {
 
   if (!enabled) return null;
 
+  /* Every cursor label comes from the message tree — no inline ternaries. */
   const labelMap: Record<CursorMode, string> = {
     default: "",
     link: "",
-    view: lang === "ru" ? "СМОТРЕТЬ" : "VIEW",
-    open: lang === "ru" ? "ОТКРЫТЬ" : "OPEN",
-    talk: lang === "ru" ? "НАПИСАТЬ" : "LET'S TALK",
+    view: t("cursor.view"),
+    open: t("cursor.open"),
+    talk: t("cursor.talk"),
   };
-  void t;
 
   const big = mode === "view" || mode === "open" || mode === "talk";
 

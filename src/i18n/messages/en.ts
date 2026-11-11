@@ -203,9 +203,22 @@ export const en: Messages = {
     kicker: "ARCHIVE — HORIZONTAL SCENE",
     title: "FOUR STORIES",
     hint: "Scroll — the archive opens sideways",
+    ustatopPitch: "GOT A PROBLEM? WE WILL FIND THE MASTER.",
     comingSoon: "COMING SOON · REAL SITE",
     waitlistNote: "WAITLIST · 8 SERVICE CATEGORIES",
     techLine: "TECHNOLOGIES",
+  },
+
+  /* ─────────── per-project UI labels ─────────── */
+  kashmir: {
+    img1: "Homepage — full screen",
+    img2: "Collection page — detail",
+    realStructure: "REAL SITE STRUCTURE",
+  },
+  educrm: {
+    webAdmin: "WEB ADMIN",
+    telegram: "TELEGRAM",
+    botMiniApp: "BOT + MINI APP",
   },
 
   /* ─────────── services ─────────── */
@@ -326,6 +339,7 @@ export const en: Messages = {
     s5: "PRODUCT",
     aiBody:
       "AI is not a magician in the back room — it is a partner at my desk. I bring the idea, it brings speed; I break things, it helps me reassemble.",
+    imageAlt: "Abstract artwork for the lab",
     scrollHint: "←SCROLL→",
     magnet: "MAGNET",
     motion: "MOTION",

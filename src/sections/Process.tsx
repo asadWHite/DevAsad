@@ -1,24 +1,24 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLang } from "../i18n";
-import { SectionLabel } from "../components/ui";
+import { useI18n } from "@/i18n";
+import { SectionLabel } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
-  { t: "pr_s1", b: "pr_s1_b" },
-  { t: "pr_s2", b: "pr_s2_b" },
-  { t: "pr_s3", b: "pr_s3_b" },
-  { t: "pr_s4", b: "pr_s4_b" },
-  { t: "pr_s5", b: "pr_s5_b" },
-  { t: "pr_s6", b: "pr_s6_b" },
-  { t: "pr_s7", b: "pr_s7_b" },
-  { t: "pr_s8", b: "pr_s8_b" },
-];
+  { t: "process.s1", b: "process.b1" },
+  { t: "process.s2", b: "process.b2" },
+  { t: "process.s3", b: "process.b3" },
+  { t: "process.s4", b: "process.b4" },
+  { t: "process.s5", b: "process.b5" },
+  { t: "process.s6", b: "process.b6" },
+  { t: "process.s7", b: "process.b7" },
+  { t: "process.s8", b: "process.b8" },
+] as const;
 
 export default function Process() {
-  const { t } = useLang();
+  const { t } = useI18n();
   const root = useRef<HTMLElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ export default function Process() {
       <div ref={wrapRef} className="relative h-[440vh] md:h-[720vh]">
         <div ref={pinRef} className="sticky top-0 h-screen w-full overflow-hidden flex flex-col">
           <div className="px-5 sm:px-10 pt-24 shrink-0">
-            <SectionLabel dark index="08" text={t("pr_kicker")} right={t("pr_title")} />
+            <SectionLabel dark index="08" text={t("process.kicker")} right={t("process.title")} />
           </div>
 
           <div className="flex-1 grid grid-cols-12 gap-6 px-5 sm:px-10 items-center min-h-0 py-6">
@@ -103,10 +103,10 @@ export default function Process() {
           {/* version strip + progress */}
           <div className="shrink-0 px-5 sm:px-10 pb-8">
             <div className="mono text-[9px] tracking-[0.22em] text-paper/50 flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-5">
-              <span className={step <= 4 ? "text-paper" : ""}>{t("pr_v1")}</span>
-              <span>→</span><span className={step === 5 ? "text-paper" : ""}>{t("pr_problem")}</span>
-              <span>→</span><span className={step === 6 ? "text-paper" : ""}>{t("pr_iter")}</span>
-              <span>→</span><span className={step >= 7 ? "text-paper" : ""}>{t("pr_v2")}</span>
+              <span className={step <= 4 ? "text-paper" : ""}>{t("process.v1")}</span>
+              <span>→</span><span className={step === 5 ? "text-paper" : ""}>{t("process.problem")}</span>
+              <span>→</span><span className={step === 6 ? "text-paper" : ""}>{t("process.iteration")}</span>
+              <span>→</span><span className={step >= 7 ? "text-paper" : ""}>{t("process.v2")}</span>
             </div>
             <div className="flex gap-1.5">
               {STEPS.map((_, i) => (

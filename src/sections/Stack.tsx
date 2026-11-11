@@ -1,25 +1,26 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLang } from "../i18n";
-import { SectionLabel, FadeUp } from "../components/ui";
+import { useI18n } from "@/i18n";
+import { SectionLabel, FadeUp } from "@/components/ui";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* Row labels are message keys; the items are technology names (§16 — never
+   translated). */
 const ROWS: { label: string; items: string[] }[] = [
-  { label: "FRONTEND", items: ["Next.js", "React", "TypeScript", "HTML", "CSS", "Tailwind"] },
-  { label: "MOTION", items: ["GSAP", "ScrollTrigger", "Lenis", "Framer Motion", "React Bits"] },
-  { label: "BACKEND", items: ["Supabase", "Postgres", "Auth", "Storage", "RLS"] },
-  { label: "__DEPLOY", items: ["Vercel"] },
-  { label: "__ECO", items: ["Telegram", "Mini Apps", "Google Maps", "Search Console", "SEO"] },
-  { label: "__MOBILE", items: ["Kotlin", "Jetpack Compose"] },
-  { label: "__AI", items: ["Gemini", "Claude", "Codex"] },
+  { label: "stack.frontend", items: ["Next.js", "React", "TypeScript", "HTML", "CSS", "Tailwind"] },
+  { label: "stack.motion", items: ["GSAP", "ScrollTrigger", "Lenis", "Framer Motion", "React Bits"] },
+  { label: "stack.backend", items: ["Supabase", "Postgres", "Auth", "Storage", "RLS"] },
+  { label: "stack.deploy", items: ["Vercel"] },
+  { label: "stack.ecosystem", items: ["Telegram", "Mini Apps", "Google Maps", "Search Console", "SEO"] },
+  { label: "stack.mobile", items: ["Kotlin", "Jetpack Compose"] },
+  { label: "stack.ai", items: ["Gemini", "Claude", "Codex"] },
 ];
 
 function Row({ label, items, index }: { label: string; items: string[]; index: number }) {
-  const { t } = useLang();
-  const name =
-    label === "__DEPLOY" ? t("stack_deploy") : label === "__ECO" ? t("stack_eco") : label === "__MOBILE" ? t("stack_mobile") : label === "__AI" ? t("stack_ai") : label;
+  const { t } = useI18n();
+  const name = t(label as "stack.frontend");
   return (
     <div data-st-row className="relative grid grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-t border-line last:border-b items-baseline">
       <div className="col-span-12 sm:col-span-3 flex items-center gap-4">
@@ -39,7 +40,7 @@ function Row({ label, items, index }: { label: string; items: string[]; index: n
 }
 
 export default function Stack() {
-  const { t } = useLang();
+  const { t } = useI18n();
   const root = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -63,10 +64,10 @@ export default function Stack() {
   return (
     <section ref={root} className="relative bg-pure py-24 sm:py-36">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-10">
-        <SectionLabel index="07" text={t("stack_kicker")} />
+        <SectionLabel index="07" text={t("stack.kicker")} />
         <div className="mt-10 mb-14 max-w-3xl">
           <h2 className="display- font-extrabold text-ink" style={{ fontSize: "clamp(36px, 5vw, 76px)" }}>
-            {t("stack_title")}
+            {t("stack.title")}
           </h2>
         </div>
 
@@ -80,7 +81,7 @@ export default function Stack() {
         </div>
 
         <FadeUp className="mt-12 max-w-2xl">
-          <p className="text-[14px] sm:text-[15px] leading-relaxed text-smoke italic border-l-2 border-navy pl-5">{t("stack_note")}</p>
+          <p className="text-[14px] sm:text-[15px] leading-relaxed text-smoke italic border-l-2 border-navy pl-5">{t("stack.note")}</p>
         </FadeUp>
       </div>
     </section>
